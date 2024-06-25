@@ -1,0 +1,37 @@
+[registration] fsl_registration/: 使用fsl的flirt对NII图像配准
+       配准前的图像参数(T1,T2一样)：
+              图像大小(多种):[512,512,23] [512,512,24], [384,384,23]
+              体素大小：[0.47,0.47,6.5]
+              
+       配准后的图像参数：
+               图像大小：[91,109,91]
+               体素大小：[2,2,2]
+              
+[load_data] new_load_data.py: 读入数据并预处理
+       (统一的)预处理过程：pre_aug函数
+                剪切：[91,109,91]→[75,85,75]（经过检查不会切到有肿瘤的部分）
+                归一化：torchIO.ZNormalization
+       (针对训练集的)数据增强：propre_aug函数(参数aug=True时进行数据增强)
+              综合(Compose)多个torchIO的增强方法，重采样三次并增强
+
+[train] train_cross_tencent_new_aug.py：用于训练T1或者T2数据
+        *opt 指utils2/config 文件
+        训练数据路径： opt.data_path
+        测试数据路径： opt.test_data_path
+        五折交叉验证：使用StratifiedKFold将训练数据分为5折，每次选择一折作为验证集，其它四折作为训练集，只有训练集使用torchIO进行数据增强（重采样三次）
+        结果：取五次训练的平均值
+        
+[关于config文件] utils2/config
+        #=twi====
+        此处的参数用于训练“T1_T2branch融合”模型
+          *分别有T1数据和T2数据的路径
+        #=twi====
+        
+        #=T1===
+        此处的参数用于训练T1的模型
+        #=T1===
+        
+        #=T2===
+        此处的参数用于训练T2的模型
+        #=T2===    
+        其余是共同享有的参数
