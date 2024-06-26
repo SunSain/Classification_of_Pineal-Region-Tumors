@@ -1382,8 +1382,9 @@ def single():
     test_roc_save_path_boxex.append(test_roc_save_path)
     title_boxex.append("T1C_Augmentation_Ablation")
     
-
     main(filepath_boxex,colorboxex,data_path,testdata_path,test_roc_save_path_boxex,labelboxed,title_boxex)
+    
+    
 def special_drawing():
     T2_AUG_output_path = [       
          "/home/chenxr/Pineal_region/after_12_08/Results/Noclinical_PureMRI/Two/T2_ce/model_result/",
@@ -1457,7 +1458,9 @@ def special_drawing():
 
 if __name__ == "__main__":
     
-    special_drawing()
+    #special_drawing()
+    single()
+    
 def common_drawing():
     #avg_cm()
     #test_mean()
